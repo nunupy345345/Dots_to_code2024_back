@@ -1,5 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
+# MEMO ↓CORSを有効にしたいとき使う
+# from fastapi_cors import CORS 
 
 app = FastAPI()
 
