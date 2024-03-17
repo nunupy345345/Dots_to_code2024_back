@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# MEMO category.nameで英語側を取り出す
 class Category(Enum):
     cosme_beauty = "コスメ・ビューティー"
     food_sweet = "食品・スイーツ"
@@ -11,7 +11,7 @@ class Category(Enum):
     kitchen_table_ware = "キッチン・テーブルウェア"
     hobby_lifestyle_supplies = "趣味・ライフスタイル雑貨"
     others = "その他"
-
+    
     @classmethod
     def create_by_name(cls, name: str):
         for category in Category:

@@ -1,3 +1,4 @@
+import sys
 from pydantic import BaseModel, HttpUrl
 from .category import Category
 
