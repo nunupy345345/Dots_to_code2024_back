@@ -9,19 +9,24 @@ services:
       - 8000:8000
     restart: always
     tty: true
-    depends_on:
-      - db
-
-  db:
-    image: postgres:latest
-    container_name: postgres-db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=secret
+    command: uvicorn main:app --host 8000 --reload
+  redis:
+    image: redis:7.0
     ports:
-      - 5432:5432
-
-volumes:
-  postgres_data:
+      - "6379:6379"
+    volumes:
+      - "./data/redis:/data"
+    platform: linux/amd64
+  tool:
+    image: rediscommander/redis-commander:latest
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOSTS=localhost:redis:6379
+    ports:
+      - "8002:8081"
+    platform: linux/amd64
