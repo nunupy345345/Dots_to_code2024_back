@@ -38,4 +38,3 @@ def read_google_form_tsv(path: str) -> list[Item]:
             )
             items.append(item)
     return items
-

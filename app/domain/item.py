@@ -1,7 +1,6 @@
 import sys
-sys.path.append("~/app")
 from pydantic import BaseModel, HttpUrl
-from domain.category import Category
+from .category import Category
 
 
 class Item(BaseModel):
