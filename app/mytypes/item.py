@@ -1,5 +1,5 @@
 from pydantic import BaseModel, HttpUrl
-from app.types.category import Category
+from app.mytypes.category import Category
 
 
 class Item(BaseModel):

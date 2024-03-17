@@ -1,5 +1,5 @@
 import csv
-from app.types import Category, Item
+from app.mytypes import Category, Item
 
 
 def read_google_form_csv(path: str) -> list[Item]:
