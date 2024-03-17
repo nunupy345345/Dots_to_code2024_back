@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# MEMO category.nameで英語側を取り出す
 class Category(Enum):
     cosme_beauty = "コスメ・ビューティー"
     food_sweet = "食品・スイーツ"
