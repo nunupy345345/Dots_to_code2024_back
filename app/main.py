@@ -3,8 +3,8 @@ from fastapi import FastAPI
 
 # MEMO ↓CORSを有効にしたいとき使う
 # from fastapi_cors import CORS
-from handler.schema import CategoryModel
-from handler.category import category_handler
+from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel
+from handler import category_handler, create_user_handler
 
 app = FastAPI()
 
@@ -12,6 +12,14 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.post("/user", response_model=UserCreateResponseModel)
+async def create_user(request_body: UserCreateModel):
+    """
+    ユーザーを作成する
+    """
+    return create_user_handler(request_body)
 
 
 @app.post("/category")
