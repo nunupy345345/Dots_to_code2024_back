@@ -1,3 +1,4 @@
+import os
 import uvicorn
 from fastapi import FastAPI
 
@@ -7,6 +8,9 @@ from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseMod
 from handler import category_handler, create_user_handler
 
 app = FastAPI()
+
+if os.environ.get("ENV") == "production":
+    os.sys.path.append("/app")
 
 
 @app.get("/")
