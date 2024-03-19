@@ -21,3 +21,10 @@ class UserService:
         except Exception as e:
             raise Exception(f"{__file__}: {str(e)}")
         return user
+
+    @staticmethod
+    def register_user_preferences(user_id: UUID4Type, item_list: list[tuple[Category, bool]]):
+        user = UserRepository.find_by_id(user_id)
+        preference_dict = {category.name: like for category, like in item_list}
+        user.preferences.update(preference_dict)
+        UserRepository.save(user)  # 上書き更新
