@@ -9,8 +9,9 @@ class UserRepository(BaseModel):
     def save(self):
         r = RedisClient()
         r.redis.set(str(self.user.id) + ":name", self.user.name)
-        for category in self.user.selected_category:
-            r.redis.sadd(str(self.user.id) + ":selected_category", category.name)
+        if self.user.selected_category is not None:
+            for category in self.user.selected_category:
+                r.redis.sadd(str(self.user.id) + ":selected_category", category.name)
         if self.user.preferences is not None:
             for item, like in self.user.preferences:
                 r.redis.sadd(str(self.user.id) + ":preferences", item, like)
@@ -38,6 +39,8 @@ class UserRepository(BaseModel):
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
         preferences = r.redis.smembers(str(user_id) + ":preferences")
         recommended_items = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
+        if name is None:
+            return None
         user = User(
             id=user_id,
             name=name,
