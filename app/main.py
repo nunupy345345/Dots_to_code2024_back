@@ -20,7 +20,7 @@ async def root():
 @app.post("/user", response_model=UserCreateResponseModel)
 async def create_user(request_body: UserCreateModel):
     """
-    ユーザーを作成する
+    ユーザー作成
     """
     return create_user_handler(request_body)
 
@@ -28,7 +28,7 @@ async def create_user(request_body: UserCreateModel):
 async def register_preferences(userId, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
-    responseは200OKに
+    responseは200OK
     """
     return register_preferences_handler(userId, request_body)
 
