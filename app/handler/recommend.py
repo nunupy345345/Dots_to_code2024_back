@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
 
-def recommend_handler(userId:str):
+def recommend_handler(user_id: str):
     try:
         """
         response: RecommendResponseModel

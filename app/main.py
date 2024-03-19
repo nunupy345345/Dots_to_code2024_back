@@ -4,8 +4,10 @@ from fastapi import FastAPI
 
 # MEMO ↓CORSを有効にしたいとき使う
 # from fastapi_cors import CORS
-from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel,RegisterPreferencesModel,RecommendResponseModel
+from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel, RegisterPreferencesModel, \
+    RecommendResponseModel
 from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
+
 app = FastAPI()
 
 if os.environ.get("ENV") == "production":
@@ -24,13 +26,15 @@ async def create_user(request_body: UserCreateModel):
     """
     return create_user_handler(request_body)
 
-@app.post("/user/{userId}/preferences")
-async def register_preferences(userId, request_body: RegisterPreferencesModel):
+
+@app.post("/user/{user_id}/preferences")
+async def register_preferences(user_id, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
     responseは200OKに
     """
-    return register_preferences_handler(userId, request_body)
+    return register_preferences_handler(user_id, request_body)
+
 
 @app.post("/category")
 async def get_items_by_category(request_body: CategoryModel):
@@ -39,13 +43,15 @@ async def get_items_by_category(request_body: CategoryModel):
     """
     return category_handler(request_body)
 
-@app.get("/user/{userId}/recommend", response_model=UserCreateResponseModel)
-async def recommend(userId):
+
+@app.get("/user/{user_id}/recommend", response_model=UserCreateResponseModel)
+async def recommend(user_id):
     """
     そのユーザーにおすすめする商品
     requestbody:無し
     """
-    return recommend_handler(userId)
+    return recommend_handler(user_id)
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
