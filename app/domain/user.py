@@ -10,3 +10,7 @@ class User(BaseModel):
     selected_category: Optional[set[Category]] = None
     preferences: Optional[set[tuple[Item, bool]]] = None
     recommended_items: Optional[list[Item]] = None
+
+    @staticmethod
+    def create(user_id: UUID4, name: str):
+        return User(id=user_id, name=name)

@@ -1,35 +1,41 @@
 from pydantic import BaseModel, UUID4
-from domain import User, Category
+from domain import Category, User
 from data.redis import RedisClient
+from typing import TYPE_CHECKING
 
 
 class UserRepository(BaseModel):
-    user: User
 
-    def save(self):
+    @classmethod
+    def save(cls, user: User):
         r = RedisClient()
-        r.redis.set(str(self.user.id) + ":name", self.user.name)
-        if self.user.selected_category is not None:
-            for category in self.user.selected_category:
-                r.redis.sadd(str(self.user.id) + ":selected_category", category.name)
-        if self.user.preferences is not None:
-            for item, like in self.user.preferences:
-                r.redis.sadd(str(self.user.id) + ":preferences", item, like)
-        if self.user.recommended_items is not None:
-            for item in self.user.recommended_items:
-                r.redis.rpush(str(self.user.id) + ":recommended_items", item)
+        r.redis.set(str(user.id) + ":name", user.name)
+        if user.selected_category is not None:
+            for category in user.selected_category:
+                try:
+                    r.redis.sadd(str(user.id) + ":selected_category", category.name)
+                except Exception as e:
+                    raise Exception(f"{__file__}: {str(e)}")
+        if user.preferences is not None:
+            for item, like in user.preferences:
+                r.redis.sadd(str(user.id) + ":preferences", item, like)
+        if user.recommended_items is not None:
+            for item in user.recommended_items:
+                r.redis.rpush(str(user.id) + ":recommended_items", item)
 
-    def update(self):
+    @classmethod
+    def update(cls, user: User):
         # 一旦全て削除してから再登録
-        self.delete()
-        self.save()
+        cls.delete(user)
+        cls.save(user)
 
-    def delete(self):
+    @classmethod
+    def delete(cls, user: User):
         r = RedisClient()
-        r.redis.delete(str(self.user.id) + ":name")
-        r.redis.delete(str(self.user.id) + ":selected_category")
-        r.redis.delete(str(self.user.id) + ":preferences")
-        r.redis.delete(str(self.user.id) + ":recommended_items")
+        r.redis.delete(str(user.id) + ":name")
+        r.redis.delete(str(user.id) + ":selected_category")
+        r.redis.delete(str(user.id) + ":preferences")
+        r.redis.delete(str(user.id) + ":recommended_items")
 
     @staticmethod
     def find_by_id(user_id: UUID4) -> User:

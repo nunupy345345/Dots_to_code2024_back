@@ -7,19 +7,17 @@ from uuid import uuid4
 class UserService:
     @staticmethod
     def register_item_category(user_id: UUID4Type, category_list: list[str]) -> None:
-        user_repository = UserRepository()
-        user = user_repository.find_by_id(user_id)
+        user = UserRepository.find_by_id(user_id)
         categories = [Category.create_by_name(category) for category in category_list]
         user.selected_category = categories
-        UserRepository(user=user).save()  # 上書き更新
+        UserRepository.save(user)  # 上書き更新
 
     @staticmethod
-    def create_user(name: str):
+    def create_user_and_save(name: str):
         uuid = uuid4()
-        user = User(id=uuid, name=name)
-        ur = UserRepository(user=user)
+        user = User.create(user_id=uuid, name=name)
         try:
-            ur.save()
+            UserRepository.save(user)
         except Exception as e:
             raise Exception(f"{__file__}: {str(e)}")
         return user
