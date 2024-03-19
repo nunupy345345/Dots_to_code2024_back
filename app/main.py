@@ -28,7 +28,7 @@ async def create_user(request_body: UserCreateModel):
 async def register_preferences(userId, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
-    responseは200OK
+    responseは200OKに
     """
     return register_preferences_handler(userId, request_body)
 
