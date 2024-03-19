@@ -19,7 +19,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+COPY ./app /app
 
 # Pythonパッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt
