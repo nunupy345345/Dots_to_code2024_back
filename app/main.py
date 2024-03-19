@@ -1,9 +1,7 @@
 import os
 import uvicorn
 from fastapi import FastAPI
-
-# MEMO ↓CORSを有効にしたいとき使う
-# from fastapi_cors import CORS
+from fastapi.middleware.cors import CORSMiddleware
 from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel,RegisterPreferencesModel,RecommendResponseModel
 from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
 app = FastAPI()
@@ -11,6 +9,18 @@ app = FastAPI()
 if os.environ.get("ENV") == "production":
     os.sys.path.append("/app")
 
+origins = [
+    'http://localhost:8000',
+    'https://dots-to-code-thoughtful.vercel.app'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 @app.get("/")
 async def root():
