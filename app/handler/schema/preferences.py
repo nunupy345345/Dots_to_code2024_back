@@ -5,6 +5,5 @@ class PreferenceModel(BaseModel):
     is_like: bool
 
 class RegisterPreferencesModel(BaseModel):
-    userId: UUID4
     PreferenceList: list[PreferenceModel]
     

@@ -24,7 +24,7 @@ async def create_user(request_body: UserCreateModel):
     """
     return create_user_handler(request_body)
 
-@app.post("/user/{userId}/oreferences")
+@app.post("/user/{userId}/preferences")
 async def register_preferences(userId, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
