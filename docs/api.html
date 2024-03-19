@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>My Project - ReDoc</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style data-styled="" data-styled-version="4.4.1"></style>
+</head>
+<body>
+    <div id="redoc-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"> </script>
+    <script>
+        var spec = {"openapi": "3.1.0", "info": {"title": "FastAPI", "version": "0.1.0"}, "paths": {"/": {"get": {"summary": "Root", "operationId": "root__get", "responses": {"200": {"description": "Successful Response", "content": {"application/json": {"schema": {}}}}}}}, "/user": {"post": {"summary": "Create User", "description": "\u30e6\u30fc\u30b6\u30fc\u3092\u4f5c\u6210\u3059\u308b", "operationId": "create_user_user_post", "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/UserCreateModel"}}}, "required": true}, "responses": {"200": {"description": "Successful Response", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/UserCreateResponseModel"}}}}, "422": {"description": "Validation Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/HTTPValidationError"}}}}}}}, "/category": {"post": {"summary": "Get Items By Category", "description": "MEMO: \u30eb\u30fc\u30bf\u30fc\u90e8\u5206\u306b\u306f\u5177\u4f53\u7684\u306a\u51e6\u7406\u306f\u66f8\u304b\u306a\u3044\u3002\u51e6\u7406\u306fhandler\u306b\u66f8\u304f", "operationId": "get_items_by_category_category_post", "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/CategoryModel"}}}, "required": true}, "responses": {"200": {"description": "Successful Response", "content": {"application/json": {"schema": {}}}}, "422": {"description": "Validation Error", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/HTTPValidationError"}}}}}}}}, "components": {"schemas": {"CategoryModel": {"properties": {"user_id": {"type": "string", "format": "uuid4", "title": "User Id"}, "category_list": {"items": {"type": "string"}, "type": "array", "title": "Category List"}}, "type": "object", "required": ["user_id", "category_list"], "title": "CategoryModel"}, "HTTPValidationError": {"properties": {"detail": {"items": {"$ref": "#/components/schemas/ValidationError"}, "type": "array", "title": "Detail"}}, "type": "object", "title": "HTTPValidationError"}, "UserCreateModel": {"properties": {"name": {"type": "string", "title": "Name"}}, "type": "object", "required": ["name"], "title": "UserCreateModel"}, "UserCreateResponseModel": {"properties": {"id": {"type": "string", "format": "uuid4", "title": "Id"}, "name": {"type": "string", "title": "Name"}}, "type": "object", "required": ["id", "name"], "title": "UserCreateResponseModel"}, "ValidationError": {"properties": {"loc": {"items": {"anyOf": [{"type": "string"}, {"type": "integer"}]}, "type": "array", "title": "Location"}, "msg": {"type": "string", "title": "Message"}, "type": {"type": "string", "title": "Error Type"}}, "type": "object", "required": ["loc", "msg", "type"], "title": "ValidationError"}}}};
+        Redoc.init(spec, {}, document.getElementById("redoc-container"));
+    </script>
+</body>
+</html>
+
