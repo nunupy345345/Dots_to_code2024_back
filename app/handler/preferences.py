@@ -1,4 +1,4 @@
-from .schema import RegisterPreferencesModel, PreferenceModel
+from .schema import RegisterPreferencesModel, PreferenceModel, UserCreateModel
 from services.user import UserService
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse

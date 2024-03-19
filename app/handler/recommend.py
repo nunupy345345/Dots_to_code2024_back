@@ -1,5 +1,4 @@
 from .schema import RecommendResponseModel
-from services.user import UserService
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
