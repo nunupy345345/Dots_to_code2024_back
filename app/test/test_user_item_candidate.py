@@ -27,8 +27,10 @@ class TestUserService(unittest.TestCase):
         user = us.create_user_and_save("test_user_test_register_user_preferences")
         registered_user_1 = UserRepository.find_by_id(user.id)
         # ユーザーの好みを登録
-        self.assertEqual(registered_user_1.preferences, None)
-        us.register_user_preferences(user.id, [(Category.cosme_beauty, True), (Category.food_sweet, False)])
+        self.assertEqual(registered_user_1.preferences, {})
+        item1 = ItemService.get_all_items()[0]
+        item2 = ItemService.get_all_items()[1]
+        us.register_user_preferences(user.id, [(item1, True), (item2, False)])
         # 好みが登録されているか確認
         registered_user_2 = UserRepository.find_by_id(user.id)
         self.assertNotEqual(registered_user_2.preferences, None)

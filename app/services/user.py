@@ -23,8 +23,8 @@ class UserService:
         return user
 
     @staticmethod
-    def register_user_preferences(user_id: UUID4Type, item_list: list[tuple[Category, bool]]):
+    def register_user_preferences(user_id: UUID4Type, item_list: list[tuple[Item, bool]]):
         user = UserRepository.find_by_id(user_id)
-        preference_dict = {category.name: like for category, like in item_list}
+        preference_dict = {item.id: like for item, like in item_list}
         user.preferences.update(preference_dict)
         UserRepository.save(user)  # 上書き更新
