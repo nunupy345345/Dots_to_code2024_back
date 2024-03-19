@@ -17,8 +17,8 @@ class UserRepository(BaseModel):
                 except Exception as e:
                     raise Exception(f"{__file__}: {str(e)}")
         if user.preferences is not None:
-            for item, like in user.preferences:
-                r.redis.sadd(str(user.id) + ":preferences", item, like)
+            for itemId, like in user.preferences.items():
+                r.redis.hset(str(user.id) + ":preferences", itemId, like)
         if user.recommended_items is not None:
             for item in user.recommended_items:
                 r.redis.rpush(str(user.id) + ":recommended_items", item)
@@ -43,7 +43,7 @@ class UserRepository(BaseModel):
         name = r.redis.get(str(user_id) + ":name")
         selected_category_value = r.redis.smembers(str(user_id) + ":selected_category")
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
-        preferences = r.redis.smembers(str(user_id) + ":preferences")
+        preferences = r.redis.hgetall(str(user_id) + ":preferences")
         recommended_items = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
         if name is None:
             return None
