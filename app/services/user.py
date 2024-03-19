@@ -1,6 +1,6 @@
 from repository.user import UserRepository
 from pydantic import UUID4 as UUID4Type
-from domain.user import User
+from domain import User, Category
 from uuid import uuid4
 
 
@@ -11,7 +11,7 @@ class UserService:
         user = user_repository.find_by_id(user_id)
         categories = [Category.create_by_name(category) for category in category_list]
         user.selected_category = categories
-        UserRepository(user).save()  # 上書き更新
+        UserRepository(user=user).save()  # 上書き更新
 
     @staticmethod
     def create_user(name: str):
