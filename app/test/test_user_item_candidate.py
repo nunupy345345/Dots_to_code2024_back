@@ -7,6 +7,9 @@ from repository.user import UserRepository
 
 class TestUserService(unittest.TestCase):
     def test_create_user(self):
+        """
+        ユーザーを作成するテスト
+        """
         us = UserService()
         user = us.create_user_and_save("test_user")
         self.assertEqual(user.name, "test_user")
@@ -14,6 +17,9 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(registered_user.name, "test_user")
 
     def test_register_item_category(self):
+        """
+        ユーザーが選択したカテゴリを登録するテスト
+        """
         us = UserService()
         user = us.create_user_and_save("test_user_test_register_item_category")
         # カテゴリを登録
@@ -24,6 +30,9 @@ class TestUserService(unittest.TestCase):
         self.assertIn(Category.cosme_beauty, registered_user.selected_category)
 
     def test_register_user_preferences(self):
+        """
+        ユーザーの各アイテムの好みを登録するテスト
+        """
         us = UserService()
         user = us.create_user_and_save("test_user_test_register_user_preferences")
         registered_user_1 = UserRepository.find_by_id(user.id)
@@ -39,6 +48,9 @@ class TestUserService(unittest.TestCase):
         self.assertIn(1, registered_user_2.preferences)
 
     def test_get_preference_unregistered_items__no_preferences(self):
+        """
+        ユーザーの好みが登録されていない場合の未登録商品を取得するテスト
+        """
         us = UserService()
         user = us.create_user_and_save("test_get_preference_unregistered_items__no_preferences")
         us.register_item_category(user.id, [Category.cosme_beauty.name])
@@ -52,6 +64,9 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(len(items), 5)  # google formのデータが変わり次第変わる
 
     def test_get_preference_unregistered_items__yes_preferences(self):
+        """
+        ユーザーの好みが登録されている場合の未登録商品を取得するテスト
+        """
         us = UserService()
         user = us.create_user_and_save("test_get_preference_unregistered_items__yes_preferences")
         us.register_item_category(user.id, [Category.cosme_beauty.name])
