@@ -1,0 +1,8 @@
+POST http://localhost:8000/category
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": "c56c43d8-33b2-49f8-91ac-adbade5c4353",
+  "category_list": ["cosme_beauty"]
+}
