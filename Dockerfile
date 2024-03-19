@@ -19,11 +19,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+COPY ./app /app
+
 # Pythonパッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt
-
-# アプリケーションのコードを追加
-COPY . /app
-
-# FastAPIの起動
-CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
