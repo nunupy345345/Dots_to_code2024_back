@@ -7,9 +7,9 @@ class ItemRecommend:
     def __init__(self, items):
         self.items: list[Item] = items
         self.item_vec: np.array = np.array([item.evaluations for item in items])
-        self.similarities = self.calc_similarity()
+        self.similarities = self._calc_similarity()
 
-    def calc_similarity(self) -> np.array:
+    def _calc_similarity(self) -> np.array:
         """
         アイテム同士のコサイン類似度行列を計算しておく
         """
