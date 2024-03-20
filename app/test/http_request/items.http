@@ -1,0 +1,22 @@
+// 後のリクエストで使用する用のuserを作成
+POST http://localhost:8000/user
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "http_test_user_items"
+}
+
+> {%
+    client.log(typeof response.body) // なぜかstringになる
+    const user_id = response.body.id // stringになってしまうので取り出せない
+    client.global.set("user_id", user_id) // が出来たら良かったんだけど…
+%}
+
+###
+// user_idを使用してitemが返ってくるかテストする
+
+GET http://localhost:8000/items/{{user_id}}
+// user_idは実際にはセットされない…？ので、手動で置き換える
+
+###
