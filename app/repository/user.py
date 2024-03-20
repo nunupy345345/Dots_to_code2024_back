@@ -1,35 +1,41 @@
 from pydantic import BaseModel, UUID4
-from domain import User, Category
+from domain import Category, User
 from data.redis import RedisClient
+from typing import TYPE_CHECKING
 
 
 class UserRepository(BaseModel):
-    user: User
 
-    def save(self):
+    @classmethod
+    def save(cls, user: User):
         r = RedisClient()
-        r.redis.set(str(self.user.id) + ":name", self.user.name)
-        if self.user.selected_category is not None:
-            for category in self.user.selected_category:
-                r.redis.sadd(str(self.user.id) + ":selected_category", category.name)
-        if self.user.preferences is not None:
-            for item, like in self.user.preferences:
-                r.redis.sadd(str(self.user.id) + ":preferences", item, like)
-        if self.user.recommended_items is not None:
-            for item in self.user.recommended_items:
-                r.redis.rpush(str(self.user.id) + ":recommended_items", item)
+        r.redis.set(str(user.id) + ":name", user.name)
+        if user.selected_category is not None:
+            for category in user.selected_category:
+                try:
+                    r.redis.sadd(str(user.id) + ":selected_category", category.name)
+                except Exception as e:
+                    raise Exception(f"{__file__}: {str(e)}")
+        if user.preferences is not None:
+            for itemId, like in user.preferences.items():
+                r.redis.hset(str(user.id) + ":preferences", itemId, int(like))
+        if user.recommended_items is not None:
+            for item in user.recommended_items:
+                r.redis.rpush(str(user.id) + ":recommended_items", item)
 
-    def update(self):
+    @classmethod
+    def update(cls, user: User):
         # 一旦全て削除してから再登録
-        self.delete()
-        self.save()
+        cls.delete(user)
+        cls.save(user)
 
-    def delete(self):
+    @classmethod
+    def delete(cls, user: User):
         r = RedisClient()
-        r.redis.delete(str(self.user.id) + ":name")
-        r.redis.delete(str(self.user.id) + ":selected_category")
-        r.redis.delete(str(self.user.id) + ":preferences")
-        r.redis.delete(str(self.user.id) + ":recommended_items")
+        r.redis.delete(str(user.id) + ":name")
+        r.redis.delete(str(user.id) + ":selected_category")
+        r.redis.delete(str(user.id) + ":preferences")
+        r.redis.delete(str(user.id) + ":recommended_items")
 
     @staticmethod
     def find_by_id(user_id: UUID4) -> User:
@@ -37,15 +43,18 @@ class UserRepository(BaseModel):
         name = r.redis.get(str(user_id) + ":name")
         selected_category_value = r.redis.smembers(str(user_id) + ":selected_category")
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
-        preferences = r.redis.smembers(str(user_id) + ":preferences")
+        preferences = r.redis.hgetall(str(user_id) + ":preferences")
         recommended_items = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
         if name is None:
             return None
+        new_preferences = {}
+        for key, value in preferences.items():
+            new_preferences[key.decode("utf-8")] = bool(int(value.decode("utf-8")))
         user = User(
             id=user_id,
             name=name,
             selected_category=selected_category,
-            preferences=preferences,
+            preferences=new_preferences,
             recommended_items=recommended_items
         )
         return user
