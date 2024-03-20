@@ -5,8 +5,8 @@ from fastapi import FastAPI
 # MEMO ↓CORSを有効にしたいとき使う
 # from fastapi_cors import CORS
 from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel, RegisterPreferencesModel, \
-    RecommendResponseModel
-from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
+    RecommendResponseModel, ItemResponseModel
+from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler, send_items_handler
 
 app = FastAPI()
 
@@ -52,13 +52,13 @@ async def recommend(user_id):
     """
     return recommend_handler(user_id)
 
-@app.get("/items/:userID", response_model=UserCreateResponseModel)
-async def recommend(user_id):
+@app.get("/items/{userId}", response_model=ItemResponseModel)
+async def send_items(user_id):
     """
-    そのユーザーにおすすめする商品
+    そのユーザーに好き嫌いを判定してもらうアイテムを返す
     requestbody:無し
     """
-    return recommend_handler(user_id)
+    return send_items_handler(user_id)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

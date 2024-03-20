@@ -1,10 +1,10 @@
-from .schema import RegisterPreferencesModel, PreferenceModel
+from .schema import ItemResponseModel
 from services.user import UserService
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
 
-def register_preferences_handler(user_id: str, request_body: RegisterPreferencesModel):
+def send_items_handler(user_id: str):
     try:
         """
 

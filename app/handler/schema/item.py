@@ -1,8 +1,13 @@
-from pydantic import BaseModel, UUID4
-
-
-# todo: モデルをつくる(多分変わる)
+from pydantic import BaseModel, UUID4, HttpUrl, Field
 
 class ItemModel(BaseModel):
-    user_id: UUID4
-    category_list: list[str]
+    id: int
+    name: str
+    category: str
+    price: int
+    url: HttpUrl
+    image_url: HttpUrl
+    evaluations: list[int]
+    
+class ItemResponseModel(BaseModel):
+    ItemList : list[ItemModel]
