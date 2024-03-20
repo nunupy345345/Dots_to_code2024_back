@@ -82,6 +82,17 @@ class TestUserService(unittest.TestCase):
             self.assertEqual(Category.cosme_beauty, item.category)
         self.assertEqual(len(items), 3)
 
+    def test_get_updated_user_recommend_items(self):
+        us = UserService()
+        user = us.create_user_and_save("test_get_updated_user_recommend_items")
+        us.register_item_category(user.id, [Category.cosme_beauty.name])
+        cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
+        us.register_user_preferences(user.id,
+                                     [(cosme_items[0], True), (cosme_items[1], True)])
+        recommended_items = us.get_updated_user_recommend_items(user.id)
+        self.assertNotEqual(recommended_items, None)
+        self.assertEqual(len(recommended_items), 5)
+
 
 if __name__ == '__main__':
     unittest.main()
