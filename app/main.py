@@ -41,6 +41,11 @@ async def get_items_by_category(request_body: CategoryModel):
     """
     ユーザーが選んだカテゴリを保存しておく(useridとcategoryidを紐づけて保存)
     MEMO: ルーター部分には具体的な処理は書かない。処理はhandlerに書く
+    e.g.
+    {
+    "user_id":"08f742ab-be3c-4e25-8329-e6d7b2696aef",
+    "category_list":["cosme_beauty","food_sweet"]
+    }
     """
     return category_handler(request_body)
 
