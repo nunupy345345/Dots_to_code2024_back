@@ -1,9 +1,7 @@
 import os
 import uvicorn
 from fastapi import FastAPI
-
-# MEMO ↓CORSを有効にしたいとき使う
-# from fastapi_cors import CORS
+from fastapi.middleware.cors import CORSMiddleware
 from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel, RegisterPreferencesModel, \
     RecommendResponseModel
 from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
@@ -13,6 +11,18 @@ app = FastAPI()
 if os.environ.get("ENV") == "production":
     os.sys.path.append("/app")
 
+origins = [
+    'http://localhost:8000',
+    'https://dots-to-code-thoughtful.vercel.app'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 @app.get("/")
 async def root():
@@ -22,7 +32,7 @@ async def root():
 @app.post("/user", response_model=UserCreateResponseModel)
 async def create_user(request_body: UserCreateModel):
     """
-    ユーザーを作成する
+    ユーザー作成
     """
     return create_user_handler(request_body)
 
@@ -31,7 +41,7 @@ async def create_user(request_body: UserCreateModel):
 async def register_preferences(user_id, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
-    responseは200OKに
+    response:200OK
     """
     return register_preferences_handler(user_id, request_body)
 
