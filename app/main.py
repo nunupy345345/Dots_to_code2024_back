@@ -4,14 +4,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel,RegisterPreferencesModel,RecommendResponseModel
 from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
+from dotenv import load_dotenv
+
 app = FastAPI()
 
 if os.environ.get("ENV") == "production":
     os.sys.path.append("/app")
 
+# .envファイルの内容を読み込見込む
+load_dotenv()
+
 origins = [
     'http://localhost:8000',
-    'https://dots-to-code-thoughtful.vercel.app'
+    'https://dots-to-code-thoughtful.vercel.app',
+    os.environ['API_URL']
 ]
 
 app.add_middleware(
