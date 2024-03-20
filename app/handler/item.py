@@ -15,19 +15,28 @@ def send_items_handler(userId: str):
         """
         us = UserService()
         items = us.get_preference_unregistered_items(userId)
-        selected_items = random.sample(items, 6)
-        item_models = [ItemModel(
-            id=item.id,
-            name=item.name,
-            category=item.category,
-            price=item.price,
-            url=item.url,
-            image_url=item.image_url,
-            evaluations=item.evaluations
-        ) for item in selected_items]
+        if len(items) < 6:
+            response = ItemResponseModel(error_message="less than 6 recommended items")
+        else:
+            selected_items = random.sample(items, 6)
 
-        # ItemResponseModelを作成
-        response = ItemResponseModel(ItemList=item_models)
+            # ItemModelのリストを作成
+            item_models = []
+            for item in selected_items:
+                item_model = ItemModel(
+                    id=item.id,
+                    name=item.name,
+                    category=item.category,
+                    price=item.price,
+                    url=item.url,
+                    image_url=item.image_url,
+                    evaluations=item.evaluations
+                )
+                item_models.append(item_model)
+
+            # ItemResponseModelを作成
+            response = ItemResponseModel(ItemList=item_models)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error create user: {str(e)}")
     return JSONResponse(status_code=200, content=response.model_dump_json())
