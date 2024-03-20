@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
 
-def register_preferences_handler(userId:str,request_body: UserCreateModel):
+def register_preferences_handler(user_id: str, request_body: UserCreateModel):
     try:
         """
 
