@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 def register_preferences_handler(user_id: str, request_body: RegisterPreferencesModel):
     try:
         """
-
+        
         """
         response = {"response": "Successful Operation"}
     except Exception as e:

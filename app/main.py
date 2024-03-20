@@ -39,6 +39,7 @@ async def register_preferences(user_id, request_body: RegisterPreferencesModel):
 @app.post("/category")
 async def get_items_by_category(request_body: CategoryModel):
     """
+    ユーザーが選んだカテゴリを保存しておく(useridとcategoryidを紐づけて保存)
     MEMO: ルーター部分には具体的な処理は書かない。処理はhandlerに書く
     """
     return category_handler(request_body)
