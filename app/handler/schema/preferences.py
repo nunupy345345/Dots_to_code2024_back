@@ -1,8 +1,8 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel
 
 
 class PreferenceModel(BaseModel):
-    itemId: UUID4
+    itemId: int
     is_like: bool
 
 
