@@ -52,6 +52,13 @@ async def recommend(user_id):
     """
     return recommend_handler(user_id)
 
+@app.get("/items/:userID", response_model=UserCreateResponseModel)
+async def recommend(user_id):
+    """
+    そのユーザーにおすすめする商品
+    requestbody:無し
+    """
+    return recommend_handler(user_id)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
