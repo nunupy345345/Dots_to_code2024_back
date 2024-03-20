@@ -4,8 +4,9 @@ from fastapi import FastAPI
 
 # MEMO ↓CORSを有効にしたいとき使う
 # from fastapi_cors import CORS
-from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel
-from handler import category_handler, create_user_handler
+from handler.schema import CategoryModel, UserCreateModel, UserCreateResponseModel, RegisterPreferencesModel, \
+    RecommendResponseModel
+from handler import category_handler, create_user_handler, register_preferences_handler, recommend_handler
 
 app = FastAPI()
 
@@ -26,12 +27,30 @@ async def create_user(request_body: UserCreateModel):
     return create_user_handler(request_body)
 
 
+@app.post("/user/{user_id}/preferences")
+async def register_preferences(user_id, request_body: RegisterPreferencesModel):
+    """
+    ユーザーの嗜好を登録する
+    responseは200OKに
+    """
+    return register_preferences_handler(user_id, request_body)
+
+
 @app.post("/category")
 async def get_items_by_category(request_body: CategoryModel):
     """
     MEMO: ルーター部分には具体的な処理は書かない。処理はhandlerに書く
     """
     return category_handler(request_body)
+
+
+@app.get("/user/{user_id}/recommend", response_model=UserCreateResponseModel)
+async def recommend(user_id):
+    """
+    そのユーザーにおすすめする商品
+    requestbody:無し
+    """
+    return recommend_handler(user_id)
 
 
 if __name__ == "__main__":
