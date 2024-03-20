@@ -5,3 +5,27 @@ Content-Type: application/json
 {
   "name": "hoge piyo"
 }
+
+###
+
+# 実際はuser_idは埋め込む
+POST http://localhost:8000/user/{{user_id}}/preferences
+Accept: application/json
+Content-Type: application/json
+
+{
+  "PreferenceList": [
+    {
+      "itemId": 1,
+      "is_like": true
+    },
+    {
+      "itemId": 2,
+      "is_like": false
+    },
+    {
+      "itemId": 3,
+      "is_like": true
+    }
+  ]
+}
