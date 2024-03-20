@@ -58,11 +58,13 @@ async def recommend(user_id):
     """
     return recommend_handler(user_id)
 
-@app.get("/items/{userId}", response_model=ItemResponseModel)
-async def send_items(user_id):
+@app.get("/items/{user_id}", response_model=ItemResponseModel)
+async def send_items(user_id:str):
     """
     そのユーザーに好き嫌いを判定してもらうアイテムを返す
     requestbody:無し
+    e.g http://localhost:8000/items/:user_id
+    で、Path VariablesにKey:user_id,Value:08f742ab-be3c-4e25-8329-e6d7b2696aef
     """
     return send_items_handler(user_id)
 
