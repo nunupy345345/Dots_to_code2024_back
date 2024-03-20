@@ -10,4 +10,4 @@ class ItemModel(BaseModel):
     evaluations: list[int]
     
 class ItemResponseModel(BaseModel):
-    ItemList : list[ItemModel]
+    item_list : list[ItemModel]
