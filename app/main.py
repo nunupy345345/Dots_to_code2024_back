@@ -12,7 +12,7 @@ if os.environ.get("ENV") == "production":
     os.sys.path.append("/app")
 
 origins = [
-    'http://localhost:8000',
+    'http://localhost:3000',
     'https://dots-to-code-thoughtful.vercel.app'
 ]
 
