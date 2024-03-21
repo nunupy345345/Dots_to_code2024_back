@@ -19,13 +19,8 @@ def register_preferences_handler(user_id: str, request_body:RegisterPreferencesM
             item_detail = ItemService.get_item_by_id(item_id)
             is_like = preference.is_like
             item_list.append((item_detail, is_like))
-            
-        # MEMO: test用
-        us.register_user_preferences(user_id, item_list)
-        user = UserRepository.find_by_id(user_id)
-        
-        # MEMO: test後 response = {"status":"Successful Operation"}にする
-        response = user.preferences
+
+        response = {"status":"Successful Operation"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error create user: {str(e)}")
     return JSONResponse(status_code=200, content=response)
