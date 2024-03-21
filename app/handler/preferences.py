@@ -14,9 +14,9 @@ def register_preferences_handler(user_id: str, request_body:RegisterPreferencesM
         us = UserService()
         item_list = []
 
-        for preference in request_body.PreferenceList:
-            item_id = preference.itemId
-            item_detail = ItemService.get_all_items()[item_id-1]
+        for preference in request_body.preference_list:
+            item_id = preference.item_id
+            item_detail = ItemService.get_item_by_id(item_id)
             is_like = preference.is_like
             item_list.append((item_detail, is_like))
             

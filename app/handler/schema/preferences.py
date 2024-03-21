@@ -2,9 +2,9 @@ from pydantic import BaseModel
 
 
 class PreferenceModel(BaseModel):
-    itemId: int
+    item_id: int
     is_like: bool
 
 
 class RegisterPreferencesModel(BaseModel):
-    PreferenceList: list[PreferenceModel]
+    preference_list: list[PreferenceModel]

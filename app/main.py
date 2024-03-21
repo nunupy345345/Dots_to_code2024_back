@@ -32,6 +32,10 @@ async def register_preferences(user_id, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
     responseは200OKに
+    e.g
+    {
+    "preference_list":[{"item_id":11,"is_like":true},{"item_id":5,"is_like":true}]
+    }
     """
     return register_preferences_handler(user_id, request_body)
 
