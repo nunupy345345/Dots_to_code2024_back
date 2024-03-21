@@ -1,7 +1,7 @@
 from pydantic import BaseModel, UUID4
 from domain import Category, User
 from data.redis import RedisClient
-from typing import TYPE_CHECKING
+from services.item import ItemService
 
 
 class UserRepository(BaseModel):
@@ -21,7 +21,7 @@ class UserRepository(BaseModel):
                 r.redis.hset(str(user.id) + ":preferences", itemId, int(like))
         if user.recommended_items is not None:
             for item in user.recommended_items:
-                r.redis.rpush(str(user.id) + ":recommended_items", item)
+                r.redis.rpush(str(user.id) + ":recommended_items", item.id)
 
     @classmethod
     def update(cls, user: User):
@@ -44,7 +44,11 @@ class UserRepository(BaseModel):
         selected_category_value = r.redis.smembers(str(user_id) + ":selected_category")
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
         preferences = r.redis.hgetall(str(user_id) + ":preferences")
-        recommended_items = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
+        recommended_items_id = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
+        recommended_items = []
+        for item_id in recommended_items_id:
+            decoded_item_id = item_id.decode("utf-8")
+            recommended_items.append(ItemService.get_item_by_id(decoded_item_id))
         if name is None:
             return None
         new_preferences = {}
