@@ -41,12 +41,11 @@ async def create_user(request_body: UserCreateModel):
 async def register_preferences(user_id, request_body: RegisterPreferencesModel):
     """
     ユーザーの嗜好を登録する
-    responseは200OKに今後する(今はpreferenseが返ってくる)
+    responseは200OKに
     e.g
     {
-    "PreferenceList":[{"itemId":1,"is_like":true},{"itemId":5,"is_like":true}]
+    "preference_list":[{"item_id":11,"is_like":true},{"item_id":5,"is_like":true}]
     }
-    response:200OK
     """
     return register_preferences_handler(user_id, request_body)
 

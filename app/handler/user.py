@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 def create_user_handler(request_body: UserCreateModel):
     try:
         user_service = UserService()
-        created_user = user_service.create_user(request_body.name)
+        created_user = user_service.create_user_and_save(request_body.name)
         response = UserCreateResponseModel(id=created_user.id, name=created_user.name)
 
     except Exception as e:
