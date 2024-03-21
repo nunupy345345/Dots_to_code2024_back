@@ -44,3 +44,6 @@ Content-Type: application/json
     }
   ]
 }
+
+###
+GET http://localhost:8000/user/9b8bbece-a51d-46d3-a630-bf7598b4d09b/recommend
