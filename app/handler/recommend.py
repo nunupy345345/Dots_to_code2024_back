@@ -10,5 +10,5 @@ def recommend_handler(user_id: str):
         """
         response = {"response": "Successful Operation"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error create user: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error recommend items: {str(e)}")
     return JSONResponse(status_code=200, content=response)
