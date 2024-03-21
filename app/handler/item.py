@@ -16,9 +16,9 @@ def send_items_handler(userId: str):
         # items = []
         us = UserService()
         items = us.get_preference_unregistered_items(userId)
-        selected_items = random.sample(items, 6)
+        selected_items = random.sample(items, min(6, len(items)))
         # response = UserRepository.find_by_id(userId)
-        response = items
+        response = selected_items
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error create user: {str(e)}")
     return JSONResponse(status_code=200, content=response.model_dump_json())
