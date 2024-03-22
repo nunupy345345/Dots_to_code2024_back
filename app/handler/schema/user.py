@@ -10,5 +10,3 @@ class UserCreateModel(BaseModel):
 class UserCreateResponseModel(BaseModel):
     id: UUID4
     name: str
-    min_price: int #テスト用
-    max_price: int #テスト用
