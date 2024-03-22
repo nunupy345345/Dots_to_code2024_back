@@ -47,8 +47,8 @@ class UserRepository(BaseModel):
         recommended_items_id = r.redis.lrange(str(user_id) + ":recommended_items", 0, -1)
         recommended_items = []
         for item_id in recommended_items_id:
-            decoded_item_id = item_id.decode("utf-8")
-            recommended_items.append(ItemService.get_item_by_id(decoded_item_id))
+            decoded_item_id: str = item_id.decode("utf-8")
+            recommended_items.append(ItemService.get_item_by_id(int(decoded_item_id)))
         if name is None:
             return None
         new_preferences = {}

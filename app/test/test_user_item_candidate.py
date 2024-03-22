@@ -77,6 +77,7 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(user2.selected_category, {Category.cosme_beauty})
         # 未登録の商品を取得
         items = us.get_preference_unregistered_items(user.id)
+        items = us.get_preference_unregistered_items("9b8bbece-a51d-46d3-a630-bf7598b4d09b")
         self.assertNotEqual(items, None)
         for item in items:
             self.assertEqual(Category.cosme_beauty, item.category)
@@ -89,6 +90,20 @@ class TestUserService(unittest.TestCase):
         cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
         us.register_user_preferences(user.id,
                                      [(cosme_items[0], True), (cosme_items[1], True)])
+        recommended_items = us.get_updated_user_recommend_items(user.id)
+        self.assertNotEqual(recommended_items, None)
+        self.assertEqual(len(recommended_items), 5)
+
+    def test_get_updated_user_recommend_items_second_time(self):
+        us = UserService()
+        user = us.create_user_and_save("test_get_updated_user_recommend_items_second_time")
+        us.register_item_category(user.id, [Category.cosme_beauty.name])
+        cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
+        us.register_user_preferences(user.id,
+                                     [(cosme_items[0], True), (cosme_items[1], True)])
+        recommended_items = us.get_updated_user_recommend_items(user.id)
+        self.assertNotEqual(recommended_items, None)
+        self.assertEqual(len(recommended_items), 5)
         recommended_items = us.get_updated_user_recommend_items(user.id)
         self.assertNotEqual(recommended_items, None)
         self.assertEqual(len(recommended_items), 5)
