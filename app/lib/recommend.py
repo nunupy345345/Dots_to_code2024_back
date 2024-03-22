@@ -1,6 +1,6 @@
 import numpy as np
 
-from app.domain import Item
+from domain import Item
 
 
 class ItemRecommend:
