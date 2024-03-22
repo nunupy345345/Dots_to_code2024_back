@@ -14,17 +14,17 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "PreferenceList": [
+  "preference_list": [
     {
-      "itemId": 1,
+      "item_id": 1,
       "is_like": true
     },
     {
-      "itemId": 2,
+      "item_id": 2,
       "is_like": false
     },
     {
-      "itemId": 3,
+      "item_id": 3,
       "is_like": true
     }
   ]

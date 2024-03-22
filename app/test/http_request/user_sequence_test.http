@@ -1,0 +1,49 @@
+POST http://localhost:8000/user
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "hoge piyo"
+}
+
+###
+POST http://localhost:8000/category
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_id": "c4afa5a2-b668-454f-9088-988e7ad5e1ec",
+  "category_list": [
+    "food_sweet", "accessory", "kitchen_table_ware"
+  ]
+}
+
+###
+GET http://localhost:8000/items/9b8bbece-a51d-46d3-a630-bf7598b4d09b
+Accept: application/json
+
+###
+
+POST http://localhost:8000/user/9b8bbece-a51d-46d3-a630-bf7598b4d09b/preferences
+Accept: application/json
+Content-Type: application/json
+
+{
+  "preference_list": [
+    {
+      "item_id": 1,
+      "is_like": true
+    },
+    {
+      "item_id": 2,
+      "is_like": false
+    },
+    {
+      "item_id": 3,
+      "is_like": true
+    }
+  ]
+}
+
+###
+GET http://localhost:8000/user/9b8bbece-a51d-46d3-a630-bf7598b4d09b/recommend
