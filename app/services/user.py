@@ -15,9 +15,9 @@ class UserService:
         UserRepository.save(user)  # 上書き更新
 
     @staticmethod
-    def create_user_and_save(name: str):
+    def create_user_and_save(name: str,min_price: int, max_price: int):
         uuid = uuid4()
-        user = User.create(user_id=uuid, name=name)
+        user = User.create(user_id=uuid, name=name, min_price=min_price, max_price=max_price)
         try:
             UserRepository.save(user)
         except Exception as e:
