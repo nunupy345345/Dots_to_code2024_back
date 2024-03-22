@@ -60,6 +60,10 @@ class UserService:
         # 評価値の高い順に並べ替え
         ranking = sorted(ranking, key=lambda x: x[1], reverse=True)
 
+        # priceがmin_price未満、max_priceを超えるものはrankingから削除する
+        min_price = user.min_price
+        max_price = user.max_price
+        ranking = [(item, rating) for item, rating in ranking if min_price <= item.price <= max_price]
         # ユーザーにおすすめのアイテムを登録
         user.recommended_items = [item for item, rating in ranking[:5]]
         UserRepository.save(user)
