@@ -9,15 +9,20 @@ from uuid import uuid4
 class UserService:
     @staticmethod
     def register_item_category(user_id: UUID4Type, category_list: list[str]) -> None:
-        user = UserRepository.find_by_id(user_id)
-        categories = [Category.create_by_name(category) for category in category_list]
-        user.selected_category = categories
-        UserRepository.save(user)  # 上書き更新
+        try:
+            user = UserRepository.find_by_id(user_id)
+            if user is None:
+                raise Exception(f"user not found")
+            categories = [Category.create_by_name(category) for category in category_list]
+            user.selected_category = categories
+            UserRepository.save(user)  # 上書き更新
+        except Exception as e:
+            raise Exception(f"{__file__}: {str(e)}")
 
     @staticmethod
-    def create_user_and_save(name: str):
+    def create_user_and_save(name: str, min_price: int, max_price: int):
         uuid = uuid4()
-        user = User.create(user_id=uuid, name=name)
+        user = User.create(user_id=uuid, name=name, min_price=min_price, max_price=max_price)
         try:
             UserRepository.save(user)
         except Exception as e:
@@ -34,6 +39,8 @@ class UserService:
     @staticmethod
     def get_preference_unregistered_items(user_id: UUID4Type) -> list[Item]:
         user = UserRepository.find_by_id(user_id)
+        if user is None:
+            raise Exception(f"User not found")
         items_candidate = set()
         if user.selected_category is None:
             items_candidate = set([item.id for item in ItemService.get_all_items()])
@@ -50,16 +57,22 @@ class UserService:
         # おすすめの候補になるアイテムを取得
         # TODO: ここですでにユーザーに見せたアイテムを除外するのもあり（アイテム数が少ないから意味ないかも）
         item_candidate = set(ItemService.get_all_items())
-        item_recommend = ItemRecommend(ItemService.get_all_items())
+        item_recommend = ItemRecommend(list(item_candidate))
         ranking = []
         # おすすめのアイテムを計算
         for item_idx, item in enumerate(item_candidate):
-            predict_rating = item_recommend.predict_rating(user.preferences, item_idx)
+            # item_idxは0から始まるが、item_idは1から始まる
+            predict_rating = item_recommend.predict_rating(
+                {item_id - 1: value for item_id, value in user.preferences.items()}, item_idx)
             ranking.append((item, predict_rating))
 
         # 評価値の高い順に並べ替え
         ranking = sorted(ranking, key=lambda x: x[1], reverse=True)
 
+        # priceがmin_price未満、max_priceを超えるものはrankingから削除する
+        min_price = user.min_price
+        max_price = user.max_price
+        ranking = [(item, rating) for item, rating in ranking if min_price <= item.price <= max_price]
         # ユーザーにおすすめのアイテムを登録
         user.recommended_items = [item for item, rating in ranking[:5]]
         UserRepository.save(user)

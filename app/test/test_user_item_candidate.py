@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append("./app")
 from domain import Category
 from services.user import UserService
 from services.item import ItemService
@@ -11,17 +13,29 @@ class TestUserService(unittest.TestCase):
         ユーザーを作成するテスト
         """
         us = UserService()
-        user = us.create_user_and_save("test_user")
+        user = us.create_user_and_save("test_user",1000,10000)
         self.assertEqual(user.name, "test_user")
+        self.assertEqual(user.min_price, 1000)
+        self.assertEqual(user.max_price, 10000)
         registered_user = UserRepository.find_by_id(user.id)
         self.assertEqual(registered_user.name, "test_user")
 
+    def test_create_user(self):
+        """
+        ユーザーを作成するテスト
+        """
+        us = UserService()
+        user = us.create_user_and_save("test_user",1000,10000)
+        self.assertEqual(user.name, "test_user")
+        registered_user = UserRepository.find_by_id(user.id)
+        self.assertEqual(registered_user.name, "test_user")
+        
     def test_register_item_category(self):
         """
         ユーザーが選択したカテゴリを登録するテスト
         """
         us = UserService()
-        user = us.create_user_and_save("test_user_test_register_item_category")
+        user = us.create_user_and_save("test_user_test_register_item_category",1000,10000)
         # カテゴリを登録
         us.register_item_category(user.id, [Category.cosme_beauty.name])
         # カテゴリが登録されているか確認
@@ -34,7 +48,7 @@ class TestUserService(unittest.TestCase):
         ユーザーの各アイテムの好みを登録するテスト
         """
         us = UserService()
-        user = us.create_user_and_save("test_user_test_register_user_preferences")
+        user = us.create_user_and_save("test_user_test_register_user_preferences",1000,10000)
         registered_user_1 = UserRepository.find_by_id(user.id)
         # ユーザーの好みを登録
         self.assertEqual(registered_user_1.preferences, {})
@@ -52,7 +66,7 @@ class TestUserService(unittest.TestCase):
         ユーザーの好みが登録されていない場合の未登録商品を取得するテスト
         """
         us = UserService()
-        user = us.create_user_and_save("test_get_preference_unregistered_items__no_preferences")
+        user = us.create_user_and_save("test_get_preference_unregistered_items__no_preferences",1000,10000)
         us.register_item_category(user.id, [Category.cosme_beauty.name])
         user2 = UserRepository.find_by_id(user.id)
         self.assertEqual(user2.selected_category, {Category.cosme_beauty})
@@ -68,7 +82,7 @@ class TestUserService(unittest.TestCase):
         ユーザーの好みが登録されている場合の未登録商品を取得するテスト
         """
         us = UserService()
-        user = us.create_user_and_save("test_get_preference_unregistered_items__yes_preferences")
+        user = us.create_user_and_save("test_get_preference_unregistered_items__yes_preferences",1000,10000)
         us.register_item_category(user.id, [Category.cosme_beauty.name])
         cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
         us.register_user_preferences(user.id,
@@ -77,7 +91,7 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(user2.selected_category, {Category.cosme_beauty})
         # 未登録の商品を取得
         items = us.get_preference_unregistered_items(user.id)
-        items = us.get_preference_unregistered_items("9b8bbece-a51d-46d3-a630-bf7598b4d09b")
+
         self.assertNotEqual(items, None)
         for item in items:
             self.assertEqual(Category.cosme_beauty, item.category)
@@ -85,7 +99,7 @@ class TestUserService(unittest.TestCase):
 
     def test_get_updated_user_recommend_items(self):
         us = UserService()
-        user = us.create_user_and_save("test_get_updated_user_recommend_items")
+        user = us.create_user_and_save("test_get_updated_user_recommend_items",1000,10000)
         us.register_item_category(user.id, [Category.cosme_beauty.name])
         cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
         us.register_user_preferences(user.id,
@@ -96,7 +110,7 @@ class TestUserService(unittest.TestCase):
 
     def test_get_updated_user_recommend_items_second_time(self):
         us = UserService()
-        user = us.create_user_and_save("test_get_updated_user_recommend_items_second_time")
+        user = us.create_user_and_save("test_get_updated_user_recommend_items_second_time",1000,10000)
         us.register_item_category(user.id, [Category.cosme_beauty.name])
         cosme_items = ItemService.get_category_items_by_category(Category.cosme_beauty)
         us.register_user_preferences(user.id,
