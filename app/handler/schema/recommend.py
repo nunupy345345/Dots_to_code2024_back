@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field,HttpUrl
 
-class ItemModel(BaseModel):
+class RecommendItemModel(BaseModel):
     id: int
     name: str
     category: str
@@ -10,4 +10,5 @@ class ItemModel(BaseModel):
     evaluations: list[int]
     
 class RecommendResponseModel(BaseModel):
-    recommend_list : list[ItemModel] = Field(..., min_items=5, max_items=5)
+    recommend_list : list[RecommendItemModel]
+    #  = Field(..., min_items=5, max_items=5)
