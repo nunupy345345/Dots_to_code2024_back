@@ -7,6 +7,8 @@ from .category import Category
 class User(BaseModel):
     id: UUID4
     name: str
+    min_price: int
+    max_price: int
     selected_category: Optional[set[Category]] = None
     preferences: Optional[dict[int, bool]] = None
     recommended_items: Optional[list[Item]] = None

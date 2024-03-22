@@ -16,6 +16,16 @@ class TestUserService(unittest.TestCase):
         registered_user = UserRepository.find_by_id(user.id)
         self.assertEqual(registered_user.name, "test_user")
 
+    def test_create_user(self):
+        """
+        ユーザーを作成するテスト
+        """
+        us = UserService()
+        user = us.create_user_and_save("test_user")
+        self.assertEqual(user.name, "test_user")
+        registered_user = UserRepository.find_by_id(user.id)
+        self.assertEqual(registered_user.name, "test_user")
+        
     def test_register_item_category(self):
         """
         ユーザーが選択したカテゴリを登録するテスト

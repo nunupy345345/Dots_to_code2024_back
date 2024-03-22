@@ -10,6 +10,9 @@ class UserRepository(BaseModel):
     def save(cls, user: User):
         r = RedisClient()
         r.redis.set(str(user.id) + ":name", user.name)
+        r.redis.set(str(user.id) + ":min_price", int(user.min_price))
+        r.redis.set(str(user.id) + ":max_price", int(user.max_price))
+        
         if user.selected_category is not None:
             for category in user.selected_category:
                 try:
@@ -33,6 +36,8 @@ class UserRepository(BaseModel):
     def delete(cls, user: User):
         r = RedisClient()
         r.redis.delete(str(user.id) + ":name")
+        r.redis.delete(str(user.id) + ":min_price")
+        r.redis.delete(str(user.id) + ":max_price")
         r.redis.delete(str(user.id) + ":selected_category")
         r.redis.delete(str(user.id) + ":preferences")
         r.redis.delete(str(user.id) + ":recommended_items")
@@ -41,6 +46,8 @@ class UserRepository(BaseModel):
     def find_by_id(user_id: UUID4) -> User:
         r = RedisClient()
         name = r.redis.get(str(user_id) + ":name")
+        min_price = int(r.redis.get(str(user_id) + ":min_price"))
+        max_price = int(r.redis.get(str(user_id) + ":max_price"))
         selected_category_value = r.redis.smembers(str(user_id) + ":selected_category")
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
         preferences = r.redis.hgetall(str(user_id) + ":preferences")
@@ -57,6 +64,8 @@ class UserRepository(BaseModel):
         user = User(
             id=user_id,
             name=name,
+            min_price = min_price,
+            max_price = max_price,
             selected_category=selected_category,
             preferences=new_preferences,
             recommended_items=recommended_items
