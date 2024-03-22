@@ -46,8 +46,8 @@ class UserRepository(BaseModel):
     def find_by_id(user_id: UUID4) -> User:
         r = RedisClient()
         name = r.redis.get(str(user_id) + ":name")
-        min_price = int(r.redis.get(str(user_id) + ":min_price"))
-        max_price = int(r.redis.get(str(user_id) + ":max_price"))
+        min_price = r.redis.get(str(user_id) + ":min_price")
+        max_price = r.redis.get(str(user_id) + ":max_price")
         selected_category_value = r.redis.smembers(str(user_id) + ":selected_category")
         selected_category = set([Category.create_by_name(value.decode('utf-8')) for value in selected_category_value])
         preferences = r.redis.hgetall(str(user_id) + ":preferences")
