@@ -15,7 +15,7 @@ class UserService:
         UserRepository.save(user)  # 上書き更新
 
     @staticmethod
-    def create_user_and_save(name: str,min_price: int, max_price: int):
+    def create_user_and_save(name: str, min_price: int, max_price: int):
         uuid = uuid4()
         user = User.create(user_id=uuid, name=name, min_price=min_price, max_price=max_price)
         try:
@@ -34,6 +34,8 @@ class UserService:
     @staticmethod
     def get_preference_unregistered_items(user_id: UUID4Type) -> list[Item]:
         user = UserRepository.find_by_id(user_id)
+        if user is None:
+            raise Exception(f"User not found")
         items_candidate = set()
         if user.selected_category is None:
             items_candidate = set([item.id for item in ItemService.get_all_items()])
@@ -50,11 +52,13 @@ class UserService:
         # おすすめの候補になるアイテムを取得
         # TODO: ここですでにユーザーに見せたアイテムを除外するのもあり（アイテム数が少ないから意味ないかも）
         item_candidate = set(ItemService.get_all_items())
-        item_recommend = ItemRecommend(ItemService.get_all_items())
+        item_recommend = ItemRecommend(list(item_candidate))
         ranking = []
         # おすすめのアイテムを計算
         for item_idx, item in enumerate(item_candidate):
-            predict_rating = item_recommend.predict_rating(user.preferences, item_idx)
+            # item_idxは0から始まるが、item_idは1から始まる
+            predict_rating = item_recommend.predict_rating(
+                {item_id - 1: value for item_id, value in user.preferences.items()}, item_idx)
             ranking.append((item, predict_rating))
 
         # 評価値の高い順に並べ替え
